@@ -1,0 +1,55 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+plugins {
+    id 'java'
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+}
+
+group 'org.apache.geode.tools'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.security:spring-security-bom:5.2.1.RELEASE'
+    }
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.default
+    into 'build/dependencies'
+}
+
+dependencies {
+    implementation ("org.apache.geode:geode-core:1.12.0")
+    implementation ("org.springframework.security:spring-security-config")
+
+    testImplementation ("junit:junit:4.12")
+    testImplementation ("org.assertj:assertj-core:3.16.1")
+    testImplementation ("org.apache.geode:geode-dunit:1.12.0")
+
+    // Tests with embedded hsqldb server.
+    testImplementation ("org.hsqldb:hsqldb:2.5.0")
+    testImplementation ("org.springframework:spring-jdbc:5.2.6.RELEASE")
+
+    // Tests with embedded ldap server.
+    testImplementation ("org.springframework.security:spring-security-ldap")
+    testImplementation ("com.unboundid:unboundid-ldapsdk:4.0.14")
+}
